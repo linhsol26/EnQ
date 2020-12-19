@@ -21,36 +21,39 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            title: Text('Categories', style: ScriptStyle),
-            leading: IconButton(
-              icon: SvgPicture.asset(
-                'assets/images/arrow_back.svg',
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              title: Text('Categories', style: ScriptStyle),
+              leading: IconButton(
+                icon: SvgPicture.asset(
+                  'assets/images/arrow_back.svg',
+                ),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              Home(uidCurrentUser: widget.uidCurrentUser)));
+                },
               ),
-              onPressed: () {
-                // Navigator.pop(context);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            Home(uidCurrentUser: widget.uidCurrentUser)));
-              },
             ),
-          ),
-          body: SafeArea(
-            child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    CategoriesCard(
-                      category: categories[index],
-                      uidCurrentUser: widget.uidCurrentUser,
-                    )),
-          )),
+            body: SafeArea(
+              child: ListView.builder(
+                  itemCount: categories.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      CategoriesCard(
+                        category: categories[index],
+                        uidCurrentUser: widget.uidCurrentUser,
+                      )),
+            )),
+      ),
     );
   }
 }

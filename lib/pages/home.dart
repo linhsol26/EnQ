@@ -83,131 +83,134 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(
-      child: Scaffold(
-        body: FutureBuilder(
-          future: Future.wait([user, recentHistory]),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    height: SizeConfig.screenHeight / 2.25,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              "Hello, ${snapshot.data[0].userName}",
-                              style: ScriptStyle,
-                            ),
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundImage:
-                                  NetworkImage(snapshot.data[0].photoUrl),
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            "Popular",
-                            style:
-                                TextStyle(fontSize: 22.5, fontFamily: FontName),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Scaffold(
+          body: FutureBuilder(
+            future: Future.wait([user, recentHistory]),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight / 2.25,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "Hello, ${snapshot.data[0].userName}",
+                                style: ScriptStyle,
+                              ),
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    NetworkImage(snapshot.data[0].photoUrl),
+                              )
+                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Container(
-                            height: 200,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                PopularCard(
-                                    'assets/images/undraw_book_lover_mkck.png'),
-                                PopularCard(
-                                    'assets/images/undraw_book_reading_kx9s.png'),
-                                PopularCard(
-                                    'assets/images/undraw_Reading_book_re_kqpk.png'),
-                              ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              "Popular",
+                              style: TextStyle(
+                                  fontSize: 22.5, fontFamily: FontName),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    height: SizeConfig.screenHeight / 2.25,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Recent",
-                            style:
-                                TextStyle(fontSize: 22.5, fontFamily: FontName),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Container(
+                              height: 200,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  PopularCard(
+                                      'assets/images/undraw_book_lover_mkck.png'),
+                                  PopularCard(
+                                      'assets/images/undraw_book_reading_kx9s.png'),
+                                  PopularCard(
+                                      'assets/images/undraw_Reading_book_re_kqpk.png'),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: 3,
-                            itemBuilder: (BuildContext context, int index) =>
-                                HistoryReviewButton(
-                                    histories: snapshot.data[1][index],
-                                    index: index,
-                                    currentUser: snapshot.data[0]),
-                          ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight / 2.25,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Recent",
+                              style: TextStyle(
+                                  fontSize: 22.5, fontFamily: FontName),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: 3,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  HistoryReviewButton(
+                                      histories: snapshot.data[1][index],
+                                      index: index,
+                                      currentUser: snapshot.data[0]),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error} from Home");
+              }
+              return SpinKitWave(
+                color: Colors.purple[50],
               );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error} from Home");
-            }
-            return SpinKitWave(
-              color: Colors.purple[50],
-            );
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.home),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.barChartOutline),
-              title: Text('Leader'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.listOutline),
-              title: Text('Categories'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              title: Text('History'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.personOutline),
-              title: Text('Profile'),
-            ),
-          ],
-          currentIndex: 0,
-          selectedItemColor: Colors.black,
-          selectedFontSize: 12,
-          unselectedItemColor: Colors.black,
-          showUnselectedLabels: true,
-          onTap: _onItemTapped,
+            },
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.home),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.barChartOutline),
+                title: Text('Leader'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.listOutline),
+                title: Text('Categories'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                title: Text('History'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.personOutline),
+                title: Text('Profile'),
+              ),
+            ],
+            currentIndex: 0,
+            selectedItemColor: Colors.black,
+            selectedFontSize: 12,
+            unselectedItemColor: Colors.black,
+            showUnselectedLabels: true,
+            onTap: _onItemTapped,
+          ),
         ),
       ),
     );

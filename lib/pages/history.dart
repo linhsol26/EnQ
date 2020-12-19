@@ -18,45 +18,48 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          centerTitle: true,
-          title: Text('History', style: ScriptStyle),
-          leading: IconButton(
-            icon: SvgPicture.asset(
-              'assets/images/arrow_back.svg',
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true,
+            title: Text('History', style: ScriptStyle),
+            leading: IconButton(
+              icon: SvgPicture.asset(
+                'assets/images/arrow_back.svg',
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
           ),
-        ),
-        body: FutureBuilder(
-            future: Future.wait([
-              widget.user,
-              HistoryService().getAllHistory(widget.uidCurrentUser)
-            ]),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: histories.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        HistoryReviewButton(
-                            histories: snapshot.data[1][index],
-                            index: index,
-                            currentUser: snapshot.data[0]),
-                  ),
+          body: FutureBuilder(
+              future: Future.wait([
+                widget.user,
+                HistoryService().getAllHistory(widget.uidCurrentUser)
+              ]),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      itemCount: histories.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          HistoryReviewButton(
+                              histories: snapshot.data[1][index],
+                              index: index,
+                              currentUser: snapshot.data[0]),
+                    ),
+                  );
+                }
+                return SpinKitWave(
+                  color: Colors.purple[50],
                 );
-              }
-              return SpinKitWave(
-                color: Colors.purple[50],
-              );
-            }),
+              }),
+        ),
       ),
     );
   }

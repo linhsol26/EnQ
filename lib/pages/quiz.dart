@@ -112,131 +112,135 @@ class _QuizState extends State<Quiz> {
   bool isVolIconOnTap = true;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-          future: widget.test,
-          builder: (BuildContext context, AsyncSnapshot<TestExam> snapshot) {
-            if (snapshot.hasData) {
-              questions = snapshot.data.questions;
-              testExam = snapshot.data;
-              return DefaultTabController(
-                length: snapshot.data.questions.length,
-                child: Scaffold(
-                  backgroundColor: Colors.white,
-                  appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: FutureBuilder(
+            future: widget.test,
+            builder: (BuildContext context, AsyncSnapshot<TestExam> snapshot) {
+              if (snapshot.hasData) {
+                questions = snapshot.data.questions;
+                testExam = snapshot.data;
+                return DefaultTabController(
+                  length: snapshot.data.questions.length,
+                  child: Scaffold(
                     backgroundColor: Colors.white,
-                    elevation: 0,
-                    centerTitle: true,
-                    title: Text('English Quiz', style: ScriptStyle),
-                    leading: IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/images/arrow_back.svg',
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    actions: [
-                      FlatButton(
-                        onPressed: () {
-                          checkCorrectAnswer();
-                        },
-                        child: Text('Finish',
-                            style: TextStyle(fontFamily: FontName)),
-                        textColor: Colors.redAccent,
-                      )
-                    ],
-                    bottom: TabBar(
-                      isScrollable: true,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.black12,
-                      indicatorColor: Colors.grey,
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      tabs: List<Widget>.generate(
-                        snapshot.data.questions.length,
-                        (index) {
-                          idQuestions.add(snapshot.data.questions[index].id);
-                          return new Tab(
-                              child: Text(
-                            (index + 1).toString(),
-                            textAlign: TextAlign.center,
-                          ));
-                        },
-                      ),
-                    ),
-                  ),
-                  body: TabBarView(
-                      children: List<Widget>.generate(
-                    snapshot.data.questions.length,
-                    (index) => new Stack(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: DefaultPaddin * 0.5),
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight * 0.25,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: DefaultPaddin * 1.5,
-                                right: DefaultPaddin * 1.5,
-                                bottom: DefaultPaddin * 1.5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(Icons.access_time),
-                                        Text(_countDown),
-                                      ],
-                                    ),
-                                    IconButton(
-                                      icon: Icon(isVolIconOnTap
-                                          ? Icons.volume_mute
-                                          : Icons.volume_off),
-                                      onPressed: () => setState(() {
-                                        isVolIconOnTap = !isVolIconOnTap;
-                                        isVolIconOnTap
-                                            ? advancedPlayer.resume()
-                                            : advancedPlayer.pause();
-                                      }),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    snapshot.data.questions[index].title,
-                                    style: ScriptStyle,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      centerTitle: true,
+                      title: Text('English Quiz', style: ScriptStyle),
+                      leading: IconButton(
+                        icon: SvgPicture.asset(
+                          'assets/images/arrow_back.svg',
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: DefaultPaddin * 10.25),
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight * 0.6,
-                          child: AnswersBox(
-                            ans: snapshot.data.questions[index].answer,
-                            indexOfQuestion: index,
-                            userAns: this.userAns,
-                          ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      actions: [
+                        FlatButton(
+                          onPressed: () {
+                            checkCorrectAnswer();
+                          },
+                          child: Text('Finish',
+                              style: TextStyle(fontFamily: FontName)),
+                          textColor: Colors.redAccent,
                         )
                       ],
+                      bottom: TabBar(
+                        isScrollable: true,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.black12,
+                        indicatorColor: Colors.grey,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        tabs: List<Widget>.generate(
+                          snapshot.data.questions.length,
+                          (index) {
+                            idQuestions.add(snapshot.data.questions[index].id);
+                            return new Tab(
+                                child: Text(
+                              (index + 1).toString(),
+                              textAlign: TextAlign.center,
+                            ));
+                          },
+                        ),
+                      ),
                     ),
-                  )),
-                ),
-              );
-            } else {
-              return SpinKitWave(
-                color: Colors.purple[50],
-              );
-            }
-          }),
+                    body: TabBarView(
+                        children: List<Widget>.generate(
+                      snapshot.data.questions.length,
+                      (index) => new Stack(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: DefaultPaddin * 0.5),
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight * 0.25,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: DefaultPaddin * 1.5,
+                                  right: DefaultPaddin * 1.5,
+                                  bottom: DefaultPaddin * 1.5),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.access_time),
+                                          Text(_countDown),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        icon: Icon(isVolIconOnTap
+                                            ? Icons.volume_mute
+                                            : Icons.volume_off),
+                                        onPressed: () => setState(() {
+                                          isVolIconOnTap = !isVolIconOnTap;
+                                          isVolIconOnTap
+                                              ? advancedPlayer.resume()
+                                              : advancedPlayer.pause();
+                                        }),
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      snapshot.data.questions[index].title,
+                                      style: ScriptStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: DefaultPaddin * 10.25),
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight * 0.6,
+                            child: AnswersBox(
+                              ans: snapshot.data.questions[index].answer,
+                              indexOfQuestion: index,
+                              userAns: this.userAns,
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+                  ),
+                );
+              } else {
+                return SpinKitWave(
+                  color: Colors.purple[50],
+                );
+              }
+            }),
+      ),
     );
   }
 

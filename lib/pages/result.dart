@@ -18,78 +18,81 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        height: SizeConfig.screenHeight,
-        width: SizeConfig.screenWidth,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SvgPicture.asset(
-              'assets/images/youngAndHappy-bro.svg',
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.screenHeight * 0.5,
-            ),
-            Center(
-              child: Text(
-                'Your Result',
-                style: Script2Style,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Container(
+          height: SizeConfig.screenHeight,
+          width: SizeConfig.screenWidth,
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SvgPicture.asset(
+                'assets/images/youngAndHappy-bro.svg',
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.screenHeight * 0.5,
               ),
-            ),
-            Center(
-              child: Text(
-                '$score / $total',
-                style: Script2Style,
+              Center(
+                child: Text(
+                  'Your Result',
+                  style: Script2Style,
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ButtonTheme(
-                  minWidth: 100.0,
-                  height: 50.0,
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => History()));
-                    },
-                    child: Text(
-                      'Review',
-                      style: TabsStyle,
-                    ),
-                    textColor: Colors.black,
-                    color: Colors.white,
-                    elevation: 5.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                  ),
+              Center(
+                child: Text(
+                  '$score / $total',
+                  style: Script2Style,
                 ),
-                ButtonTheme(
-                  minWidth: 100.0,
-                  height: 50.0,
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Categories(
-                                  uidCurrentUser: this.uidCurrentUser)));
-                    },
-                    child: Text(
-                      'Quiz',
-                      style: TabsStyle,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ButtonTheme(
+                    minWidth: 100.0,
+                    height: 50.0,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) => History()));
+                      },
+                      child: Text(
+                        'Review',
+                        style: TabsStyle,
+                      ),
+                      textColor: Colors.black,
+                      color: Colors.white,
+                      elevation: 5.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
                     ),
-                    textColor: Colors.black,
-                    color: Colors.white,
-                    elevation: 5.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
                   ),
-                ),
-              ],
-            )
-          ],
+                  ButtonTheme(
+                    minWidth: 100.0,
+                    height: 50.0,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Categories(
+                                    uidCurrentUser: this.uidCurrentUser)));
+                      },
+                      child: Text(
+                        'Quiz',
+                        style: TabsStyle,
+                      ),
+                      textColor: Colors.black,
+                      color: Colors.white,
+                      elevation: 5.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
