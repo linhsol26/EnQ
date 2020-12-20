@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:EnQ/services/auth_service.dart';
 import 'package:EnQ/pages/home.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginButton extends StatelessWidget {
   final String _title;
   final String _imgUrl;
   final String _type;
-  final Function isLogin;
-  LoginButton(this._title, this._imgUrl, this._type, this.isLogin);
+  // final Function isLogin;
+  LoginButton(this._title, this._imgUrl, this._type);
   final AuthService auth = new AuthService();
   @override
   Widget build(BuildContext context) {
@@ -19,18 +20,20 @@ class LoginButton extends StatelessWidget {
         minWidth: double.infinity,
         height: 60,
         onPressed: () {
-          this.isLogin();
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Center(
+                    child: SpinKitWave(
+                  color: Colors.purple[50],
+                ));
+              });
           if (this._type == 'GG') {
             try {
               auth.handleSignIn().whenComplete(() {
-                //Navigator.of(context).popAndPushNamed(AppRouting.home));
-                // Future.delayed(
-                //     Duration(seconds: 2),
-                // () =>
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
                         Home(uidCurrentUser: auth.currentUser.uid)));
-                //);
               });
             } catch (err) {
               print("ERROR: $err");

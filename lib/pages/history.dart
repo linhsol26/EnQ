@@ -1,6 +1,5 @@
 import 'package:EnQ/components/history_review_button.dart';
 import 'package:EnQ/const/style.dart';
-import 'package:EnQ/models/test_exam_history.dart';
 import 'package:EnQ/models/user.dart';
 import 'package:EnQ/services/history_service.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,7 @@ class _HistoryState extends State<History> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
-                      itemCount: histories.length,
+                      itemCount: snapshot.data[1].length,
                       itemBuilder: (BuildContext context, int index) =>
                           HistoryReviewButton(
                               histories: snapshot.data[1][index],
