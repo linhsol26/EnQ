@@ -20,15 +20,15 @@ class LoginButton extends StatelessWidget {
         minWidth: double.infinity,
         height: 60,
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Center(
-                    child: SpinKitWave(
-                  color: Colors.purple[50],
-                ));
-              });
           if (this._type == 'GG') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Center(
+                      child: SpinKitWave(
+                    color: Colors.purple[50],
+                  ));
+                });
             try {
               auth.handleSignIn().whenComplete(() {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -38,8 +38,19 @@ class LoginButton extends StatelessWidget {
             } catch (err) {
               print("ERROR: $err");
             }
-          } else {
-            Navigator.of(context).popAndPushNamed(AppRouting.home);
+          } else if (this._type == 'FB') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text('This feature will be enable in future',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: FontName)),
+                  );
+                });
           }
         },
         color: Colors.grey[100],
